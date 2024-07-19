@@ -1,4 +1,4 @@
-package seomile.api.Review.entity;
+package seomile.api.review.entity;
 
 import jakarta.persistence.*;
 import seomile.api.travel.entity.Travel;

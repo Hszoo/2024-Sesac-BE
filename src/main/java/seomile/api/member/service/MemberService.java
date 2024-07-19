@@ -9,6 +9,7 @@ import seomile.api.member.dto.MemberRequestDTO;
 import seomile.api.member.dto.MemberResponseDTO;
 import seomile.api.member.entity.Member;
 import seomile.api.member.repository.MemberRepository;
+import seomile.api.security.JwtProvider;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +21,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtProvider jwtProvider;
 
     public String login(MemberRequestDTO request) throws Exception {
         Member member = memberRepository.findByMemberId(request.getMemberId())
@@ -29,7 +31,9 @@ public class MemberService {
             throw new BadCredentialsException("잘못된 계정정보입니다.");
         }
 
-        return member.getMemberId() + " 로그인 성공";
+        // JWT 토큰 생성
+        String token = jwtProvider.createToken(member.getMemberId(), List.of("USER")); // 역할을 사용자로 설정
+        return token;
     }
 
     public String signup(MemberRequestDTO request) throws Exception {

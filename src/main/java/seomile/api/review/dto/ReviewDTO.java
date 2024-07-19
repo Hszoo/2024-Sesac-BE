@@ -1,4 +1,4 @@
-package seomile.api.Review.dto;
+package seomile.api.review.dto;
 
 import java.util.Date;
 import lombok.*;
