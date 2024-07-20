@@ -37,6 +37,9 @@ dependencies {
 
 	implementation 'org.springframework.security:spring-security-config'
 
+	// 채팅 Socket 라이브러리
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
 	// 크롤링 관련 라이브러리
 	implementation 'org.jsoup:jsoup:1.15.3'
 	implementation 'org.seleniumhq.selenium:selenium-java:4.14.0'
