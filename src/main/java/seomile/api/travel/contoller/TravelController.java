@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import seomile.api.travel.dto.TravelDTO;
 import seomile.api.travel.dto.TravelListDTO;
 import seomile.api.travel.service.TravelService;
 
@@ -19,6 +20,11 @@ public class TravelController {
 
     @GetMapping("/list")
     public List<TravelListDTO> getTravelList(@RequestParam(required = false) List<Integer> categories) {
-        return travelService.fetchTravelInfo(categories);
+        return travelService.fetchTravelInfoByCategory(categories);
+    }
+
+    @GetMapping("")
+    public TravelDTO getTravelList(@RequestParam(required = true) String travelCode) {
+        return travelService.fetchTravelDetailInfo(travelCode);
     }
 }

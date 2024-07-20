@@ -1,6 +1,5 @@
 package seomile.api.travel.dto;
 
-import java.util.Date;
 import java.util.List;
 
 import lombok.*;
@@ -19,10 +18,19 @@ public class TravelDTO {
     private Integer reviewCount;
     private Integer reviewRating;
     private String tel;
-    private Date closeDate;
+    private String closeDate;
     private String availableTime;
     private String fee;
 
-    // 추가 정보를 어떤 거 받아올지 정해보자능..
+    public TravelDTO(String travName, String travAddress, String travImg, String tel, String closeDate,
+                     String availableTime, String fee) {
+        this.travName = travName;
+        this.travAddress = travAddress;
+        this.travImg = travImg;
+        this.tel = tel;
+        this.closeDate = closeDate;
+        this.availableTime = availableTime;
+        this.fee = fee;
+    }
 
 }

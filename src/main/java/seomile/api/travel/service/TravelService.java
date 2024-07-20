@@ -2,6 +2,7 @@ package seomile.api.travel.service;
 
 import org.jsoup.Jsoup;
 import org.springframework.stereotype.Service;
+import seomile.api.travel.dto.TravelDTO;
 import seomile.api.travel.dto.TravelListDTO;
 
 import org.jsoup.nodes.Document;
@@ -14,18 +15,22 @@ import java.util.List;
 @Service
 public class TravelService {
 
-    // 여행지 정보를 크롤링하여 리스트로 반환하는 메소드
-    public List<TravelListDTO> fetchTravelInfo(List<Integer> categories) {
+    // base URL
+    String domain = "https://www.seouldanurim.net";
+    String baseUrl = "/attractions/D/TOURINFOTYPE2";
+
+    // 여행지 정보 카테고리 별 크롤링
+    public List<TravelListDTO> fetchTravelInfoByCategory(List<Integer> categories) {
         List<TravelListDTO> travelInfoList = new ArrayList<>();
 
         // 카테고리 기반으로 URL 생성
-        String url = generateUrl(categories);
+        String url = domain + baseUrl + generateUrl(categories);
         System.out.println("요청 url : " + url);
 
         try {
             Document doc = Jsoup.connect(url).get();
 
-            // class="card" 의 li 요소 -> 하나의 관광지
+            // 하나의 관광지 요소가 li 태그로 반복됨
             Elements travelElements = doc.select("li.card");
 
             // li태그의 각 요소를 순회 -> 정보 추출
@@ -57,10 +62,64 @@ public class TravelService {
         return travelInfoList;
     }
 
+    // 상세 관광지 정보 크롤링
+    public TravelDTO fetchTravelDetailInfo(String travelID) {
+        // 관광지 ID로 URL 생성
+        String url = domain + baseUrl + "/" + travelID;
+        System.out.println("요청 url : " + url);
+
+        TravelDTO travelDetailInfo = null;
+        try {
+            Document doc = Jsoup.connect(url).get();
+
+            // 관광지명 추출
+            Element travelNameElement = doc.select("h1").first();
+            String travelName = travelNameElement != null ? travelNameElement.text() : "Not Found";
+
+            // 주소 추출
+            Element addressElement = doc.select("div.table.has-map > div > p").first();
+            String address = addressElement != null ? addressElement.text() : "Not Found";
+
+            // 이미지 요소 선택
+            Elements imgElements = doc.select("div.item.slick-slide.slick-current.slick-active > img");
+
+            if (imgElements.isEmpty()) {
+                System.out.println("No image elements found. Please check the selector.");
+            }
+
+            String fullImgSrc = "";
+            for (Element imgElement : imgElements) {
+                String imgSrc = imgElement.attr("src");
+                fullImgSrc = domain + imgSrc;
+
+                // 결과 출력
+                System.out.println("Image src: " + fullImgSrc);
+            }
+
+            // 전화번호 추출
+            String tel = getTableData(doc, "전화번호");
+
+            // 휴무일 추출
+            String closeDate = getTableData(doc, "휴무일");
+
+            // 이용가능 시간 추출
+            String availableTime = getTableData(doc, "이용시간");
+
+            // 이용 요금 추출
+            String fee = getTableData(doc, "이용요금");
+
+            travelDetailInfo = new TravelDTO(travelName, address, fullImgSrc, tel, closeDate, availableTime, fee);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return travelDetailInfo;
+    }
+
     // 카테고리 번호에 따라 URL 생성
     private String generateUrl(List<Integer> categories) {
-        String baseUrl = "https://www.seouldanurim.net/attractions/D/TOURINFOTYPE2?sortOrder=&srchType=all&srchFilter=&srchWord=";
-        StringBuilder urlBuilder = new StringBuilder(baseUrl);
+        String addUrl = "?sortOrder=&srchType=all&srchFilter=&srchWord=";
+        StringBuilder urlBuilder = new StringBuilder(addUrl);
 
         if(categories == null) {
             urlBuilder.append("&srchWeakTypeCd=").append("all");
@@ -72,13 +131,24 @@ public class TravelService {
                 }
             }
         }
-
         return urlBuilder.toString();
     }
 
     // 요청 받은 카테고리 번호 -> 코드 변환
     private String getCategoryCode(Integer category) {
         return "TOUR_WEAK_TYPE_" + category;
+    }
+
+    // 테이블에서 특정 항목의 데이터 추출
+    private String getTableData(Document doc, String title) {
+        Elements tableElements = doc.select("div.table");
+        for (Element tableElement : tableElements) {
+            Element titleElement = tableElement.select("div.title > strong").first();
+            if (titleElement != null && title.equals(titleElement.text())) {
+                return tableElement.select("div").last().text();
+            }
+        }
+        return "Not Found";
     }
 
     // HTML에서 이미지 URL 추출
