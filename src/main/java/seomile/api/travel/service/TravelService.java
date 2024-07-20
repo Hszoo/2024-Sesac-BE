@@ -17,14 +17,14 @@ public class TravelService {
 
     // base URL
     String domain = "https://www.seouldanurim.net";
-    String baseUrl = "/attractions/D/TOURINFOTYPE2";
+    String basePath = "/attractions/D/TOURINFOTYPE2";
 
     // 여행지 정보 카테고리 별 크롤링
     public List<TravelListDTO> fetchTravelInfoByCategory(List<Integer> categories) {
         List<TravelListDTO> travelInfoList = new ArrayList<>();
 
         // 카테고리 기반으로 URL 생성
-        String url = domain + baseUrl + generateUrl(categories);
+        String url = domain + basePath + generateUrl(categories);
         System.out.println("요청 url : " + url);
 
         try {
@@ -50,7 +50,7 @@ public class TravelService {
                 // 이미지 URL 추출
                 Element imageElement = travelElement.select("span.bg-thumb").first();
                 String styleAttribute = imageElement != null ? imageElement.attr("style") : "Not Found";
-                String imageUrl = extractImageUrl(styleAttribute);
+                String imageUrl = domain + extractImageUrl(styleAttribute);
 
                 TravelListDTO travelInfo = new TravelListDTO(travelId, travelName, address, imageUrl);
                 travelInfoList.add(travelInfo);
@@ -65,7 +65,7 @@ public class TravelService {
     // 상세 관광지 정보 크롤링
     public TravelDTO fetchTravelDetailInfo(String travelID) {
         // 관광지 ID로 URL 생성
-        String url = domain + baseUrl + "/" + travelID;
+        String url = domain + basePath + "/" + travelID;
         System.out.println("요청 url : " + url);
 
         TravelDTO travelDetailInfo = null;
