@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import seomile.api.member.dto.MemberRequestDTO;
-import seomile.api.member.repository.MemberRepository;
 import seomile.api.member.service.MemberService;
 import seomile.api.member.dto.MemberResponseDTO;
 
