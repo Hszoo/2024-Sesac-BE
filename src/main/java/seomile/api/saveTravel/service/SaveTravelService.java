@@ -9,6 +9,7 @@ import seomile.api.member.entity.Member;
 import seomile.api.saveTravel.dto.SaveTravelDTO;
 import seomile.api.member.repository.MemberRepository;
 import seomile.api.saveTravel.repository.SaveTravelRepository;
+import seomile.api.travel.dto.TravelDTO;
 import seomile.api.travel.entity.Travel;
 import seomile.api.saveTravel.entity.SaveTravel;
 
@@ -22,7 +23,6 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
-
 public class SaveTravelService {
     private final SaveTravelRepository saveTravelRepository;
     private final TravelService travelService;
@@ -37,11 +37,12 @@ public class SaveTravelService {
         SaveTravel saveTravel = new SaveTravel();
         saveTravel.setUser(member);
         saveTravel.setTravel(travel);
+        saveTravel.setTravCode(saveTravelDTO.getTravCode());
 
         SaveTravel savedBookmark = saveTravelRepository.save(saveTravel);
         return new SaveTravelDTO(savedBookmark.getBookmarkId(), saveTravelDTO.getUserId(), saveTravelDTO.getTravCode());
     }
-    //사용자 저장 여행지 조회
+    //사용자 저장 여행지 전체 조회
 
     public List<SaveTravelDTO> getTravelsByUserId(Long userId) {
         Optional<Member> optionalMember = memberRepository.findById(userId);
@@ -61,4 +62,10 @@ public class SaveTravelService {
                 .orElse(Collections.emptyList());
     }
 
+    //사용자 저장 여행지 상세 조회
+    public TravelDTO getDetailInfoByUserId(Long userId,  String travCode) {
+        SaveTravel saveTravel = saveTravelRepository.findByUserIdAndTravCode(userId, travCode)
+                .orElseThrow(() -> new RuntimeException("user , save travel not found"));
+        return travelService.fetchTravelDetailInfo(saveTravel.getTravCode());
+    }
 }

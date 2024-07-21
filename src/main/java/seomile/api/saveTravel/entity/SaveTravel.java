@@ -23,5 +23,6 @@ public class SaveTravel {
     @JoinColumn(name = "travId")
     private Travel travel;
 
-
+    @Column(name = "travCode")
+    private String travCode;
 }
