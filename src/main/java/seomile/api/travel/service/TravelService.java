@@ -1,19 +1,45 @@
 package seomile.api.travel.service;
 
+import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import seomile.api.travel.dto.TravelDTO;
 import seomile.api.travel.dto.TravelListDTO;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import seomile.api.travel.entity.Travel;
+import seomile.api.travel.repository.TravelRepository;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class TravelService {
+
+    @Autowired
+    private TravelRepository travelRepository;
+
+    public Travel findOrCreateTravel(String travCode) {
+        Travel travel = travelRepository.findByTravCode(travCode)
+                .orElseGet(() -> createNewTravel(travCode));
+        System.out.println("Travel found or created: " + travel);
+        return travel;
+    }
+
+    public Travel createNewTravel(String travCode) {
+        Travel newTravel = new Travel();
+        newTravel.setTravCode(travCode);
+        travelRepository.save(newTravel);
+        System.out.println("New Travel created and saved: " + newTravel);
+        return newTravel;
+    }
 
     // base URL
     String domain = "https://www.seouldanurim.net";
