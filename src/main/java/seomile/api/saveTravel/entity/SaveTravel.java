@@ -1,9 +1,13 @@
 package seomile.api.saveTravel.entity;
 
 import jakarta.persistence.*;
+
+import lombok.Getter;
+import lombok.Setter;
 import seomile.api.travel.entity.Travel;
 import seomile.api.member.entity.Member;
-
+@Getter
+@Setter
 @Entity
 @Table(name = "SaveTravel")
 public class SaveTravel {
@@ -18,4 +22,6 @@ public class SaveTravel {
     @ManyToOne
     @JoinColumn(name = "travId")
     private Travel travel;
+
+
 }

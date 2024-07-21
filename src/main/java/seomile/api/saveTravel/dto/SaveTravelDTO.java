@@ -9,5 +9,5 @@ import lombok.*;
 public class SaveTravelDTO {
     private Long bookmarkId;
     private Long userId;
-    private Long travId;
+    private String travCode;
 }
