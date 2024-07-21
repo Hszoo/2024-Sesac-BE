@@ -27,4 +27,12 @@ public class TravelController {
     public TravelDTO getTravelList(@RequestParam(required = true) String travelCode) {
         return travelService.fetchTravelDetailInfo(travelCode);
     }
+
+
+//    @GetMapping("/조회좀하자")
+//    public TravelDTO getTravelList(String travelCode) {
+//        return travelService.fetchTravelDetailInfo(travelCode);
+//    }
+
+
 }
