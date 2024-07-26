@@ -1,4 +1,5 @@
 package seomile.api.member.dto;
+
 import lombok.*;
 import seomile.api.member.entity.Authority;
 import seomile.api.member.entity.Member;
