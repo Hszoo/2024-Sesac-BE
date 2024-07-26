@@ -15,6 +15,7 @@ import seomile.api.travel.service.TravelService;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -57,12 +58,19 @@ public class ReviewService {
         return reviewDTO.getTitle() + " 리뷰 작성 완료";
     }
 
-    public List<Review> getTravelReview(String travCode) {
+    public List<ReviewDTO> getTravelReview(String travCode) {
         // travCode로 여행지 찾기
         Travel travel = travelRepository.findByTravCode(travCode)
                 .orElseThrow(() -> new IllegalArgumentException("Travel not found"));
 
         // 여행지에 대한 리뷰 찾기
-        return reviewRepository.findByTravelCode(travel.getTravCode());
+        List<Review> reviews = reviewRepository.findByTravelCode(travel.getTravCode());
+
+        // Review 리스트를 ReviewDTO 리스트로 변환
+        List<ReviewDTO> reviewDTOs = reviews.stream()
+                .map(ReviewDTO::new)
+                .collect(Collectors.toList());
+
+        return reviewDTOs;
     }
 }

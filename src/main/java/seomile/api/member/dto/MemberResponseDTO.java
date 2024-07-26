@@ -14,14 +14,12 @@ import java.util.List;
 public class MemberResponseDTO {
     private Long id;
     private String username;
-    private List<Authority> roles = new ArrayList<>();
 
     private String token;
 
     public MemberResponseDTO(Member member) {
         this.id = member.getId();
         this.username = member.getUsername();
-        this.roles = member.getRoles();
     }
 
 }

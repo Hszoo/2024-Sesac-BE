@@ -56,7 +56,6 @@ public class MemberService {
         return MemberResponseDTO.builder()
                 .id(member.getId())
                 .username(member.getUsername())
-                .roles(member.getRoles())
                 .token(jwtProvider.createToken(member.getUsername(), member.getRoles()))
                 .build();
     }
