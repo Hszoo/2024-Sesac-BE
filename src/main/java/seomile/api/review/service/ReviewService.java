@@ -59,12 +59,12 @@ public class ReviewService {
     }
 
     public List<ReviewDTO> getTravelReview(String travCode) {
-        // travCode로 여행지 찾기
-        Travel travel = travelRepository.findByTravCode(travCode)
-                .orElseThrow(() -> new IllegalArgumentException("Travel not found"));
+//        // travCode로 여행지 찾기
+//        Travel travel = travelRepository.findByTravCode(travCode)
+//                .orElseThrow(() -> new IllegalArgumentException("Travel not found"));
 
         // 여행지에 대한 리뷰 찾기
-        List<Review> reviews = reviewRepository.findByTravelCode(travel.getTravCode());
+        List<Review> reviews = reviewRepository.findByTravelCode(travCode);
 
         // Review 리스트를 ReviewDTO 리스트로 변환
         List<ReviewDTO> reviewDTOs = reviews.stream()
@@ -72,5 +72,52 @@ public class ReviewService {
                 .collect(Collectors.toList());
 
         return reviewDTOs;
+    }
+    @Transactional
+    public String updateReview(Long reviewId, ReviewDTO reviewDTO) {
+        // 현재 로그인한 사용자의 정보 가져오기
+        String userName = SecurityUtils.getCurrentMemberId()
+                .orElseThrow(() -> new RuntimeException("사용자가 인증되지 않았습니다."));
+
+        // 수정할 리뷰 찾기
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new RuntimeException("리뷰를 찾을 수 없습니다."));
+
+        // 리뷰 작성자가 현재 사용자와 일치하는지 확인
+        if (!review.getMember().getUsername().equals(userName)) {
+            throw new RuntimeException("리뷰 수정 권한이 없습니다.");
+        }
+
+        // 리뷰 정보 업데이트
+        review.setTitle(reviewDTO.getTitle());
+        review.setContent(reviewDTO.getContent());
+        review.setStartDate(reviewDTO.getStartDate());
+        review.setEndDate(reviewDTO.getEndDate());
+        review.setRate(reviewDTO.getRate());
+
+        // 리뷰 저장
+        reviewRepository.save(review);
+
+        return reviewDTO.getTitle() + " 리뷰 수정 완료";
+    }
+
+    @Transactional
+    public String deleteReview(Long reviewId) {
+        // 현재 로그인한 사용자의 정보 가져오기
+        String userName = SecurityUtils.getCurrentMemberId()
+                .orElseThrow(() -> new RuntimeException("사용자가 인증되지 않았습니다."));
+        // 기존 리뷰 찾기
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new RuntimeException("리뷰를 찾을 수 없습니다."));
+
+        // 리뷰 작성자가 현재 사용자와 일치하는지 확인
+        if (!review.getMember().getUsername().equals(userName)) {
+            throw new RuntimeException("리뷰 삭제 권한이 없습니다.");
+        }
+
+        // 리뷰 삭제
+        reviewRepository.delete(review);
+
+        return "리뷰 삭제 완료";
     }
 }
