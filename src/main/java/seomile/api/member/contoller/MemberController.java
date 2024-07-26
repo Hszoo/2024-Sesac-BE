@@ -1,25 +1,14 @@
 package seomile.api.member.contoller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 import seomile.api.member.dto.MemberRequestDTO;
 import seomile.api.member.entity.Member;
 import seomile.api.member.service.MemberService;
 import seomile.api.member.dto.MemberResponseDTO;
-import seomile.api.security.JwtProvider;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor

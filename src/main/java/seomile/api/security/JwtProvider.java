@@ -2,8 +2,6 @@ package seomile.api.security;
 
 import io.jsonwebtoken.io.Decoders;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -16,7 +14,6 @@ import org.springframework.stereotype.Component;
 import seomile.api.member.entity.Authority;
 import seomile.api.member.service.JpaUserDetailsService;
 
-import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.*;
 
