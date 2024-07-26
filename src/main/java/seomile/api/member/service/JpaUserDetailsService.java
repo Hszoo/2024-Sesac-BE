@@ -1,5 +1,6 @@
 package seomile.api.member.service;
 
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,9 +16,9 @@ public class JpaUserDetailsService implements UserDetailsService {
     private final MemberRepository memberRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String memberId) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Member member = memberRepository.findByMemberId(memberId).orElseThrow(
+        Member member = memberRepository.findByUsername(username).orElseThrow(
                 () -> new UsernameNotFoundException("Invalid authentication!")
         );
 
