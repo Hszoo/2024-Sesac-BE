@@ -8,7 +8,6 @@ import seomile.api.review.entity.Review;
 import seomile.api.review.service.ReviewService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/review")
