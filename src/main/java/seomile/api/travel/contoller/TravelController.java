@@ -8,7 +8,7 @@ import seomile.api.review.service.ReviewService;
 import seomile.api.travel.dto.TravelDTO;
 import seomile.api.travel.dto.TravelListDTO;
 import seomile.api.travel.service.TravelService;
-
+import seomile.api.travel.entity.Travel;
 
 import java.util.List;
 
@@ -43,5 +43,10 @@ public class TravelController {
 //        return travelService.fetchTravelDetailInfo(travelCode);
 //    }
 
+    //관광지 검색
+    @GetMapping("/search")
+    public List<TravelDTO> searchTravel(@RequestParam String keyword) {
+        return travelService.searchTravelByKeyword(keyword);
+    }
 
 }

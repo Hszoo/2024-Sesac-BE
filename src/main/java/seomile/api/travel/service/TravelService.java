@@ -142,6 +142,21 @@ public class TravelService {
         return travelDetailInfo;
     }
 
+    public List<TravelDTO> searchTravelByKeyword(String keyword) {
+        List<TravelListDTO> travelInfoList = fetchTravelInfoByCategory(new ArrayList<>()); // 빈 카테고리 리스트 전달
+        List<TravelDTO> result = new ArrayList<>();
+
+        for (TravelListDTO travel : travelInfoList) {
+            if (travel.getTravName().toLowerCase().contains(keyword.toLowerCase())) {
+                TravelDTO detailInfo = fetchTravelDetailInfo(travel.getTravId());
+                if (detailInfo != null) {
+                    result.add(detailInfo);
+                }
+            }
+        }
+        return result;
+    }
+
     // 카테고리 번호에 따라 URL 생성
     private String generateUrl(List<Integer> categories) {
         String addUrl = "?sortOrder=&srchType=all&srchFilter=&srchWord=";
