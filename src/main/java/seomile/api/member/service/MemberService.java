@@ -60,19 +60,6 @@ public class MemberService {
                 .build();
     }
 
-    // 유저,권한 정보를 가져오는 메소드
-    @Transactional(readOnly = true)
-    public Optional<Member> getUserWithAuthorities(String userName) {
-        return memberRepository.findByUsername(userName);
-    }
-
-    // 현재 securityContext에 저장된 username의 정보만 가져오는 메소드
-    @Transactional(readOnly = true)
-    public Optional<Member> getMyUserWithAuthorities() {
-        return SecurityUtils.getCurrentMemberId()
-                .flatMap(memberRepository::findOneWithAuthoritiesByUsername);
-    }
-
     @Transactional(readOnly = true)
     public Member getMemberFromToken(String token) throws Exception {
         // 토큰 검증 및 사용자 계정 추출
