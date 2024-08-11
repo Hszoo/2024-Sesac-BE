@@ -50,7 +50,7 @@ public class TravelService {
         List<TravelListDTO> travelInfoList = new ArrayList<>();
 
         // 카테고리 기반으로 URL 생성
-        String url = domain + basePath + generateUrl(categories);
+        String url = domain + basePath + generateUrl(categories) + "&srchTypeCd=5&srchTypeCd=6&srchTypeCd=7";
         System.out.println("요청 url : " + url);
 
         try {
