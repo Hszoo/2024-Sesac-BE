@@ -12,6 +12,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import seomile.api.filter.DefaultCorsFilter;
 
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class SecurityConfig {
     private final JwtProvider jwtProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+    private final DefaultCorsFilter defaultCorsFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -32,6 +34,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
+                .addFilterBefore(defaultCorsFilter, DefaultCorsFilter.class)
                 .csrf(csrf -> csrf.disable())
 
                 // cors 설정
