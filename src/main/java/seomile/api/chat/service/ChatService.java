@@ -15,10 +15,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class ChatService {
-
     @Autowired
     private TravelService travelService;
-
     @Autowired
     private GptService gptService;
 
@@ -26,10 +24,12 @@ public class ChatService {
     private List<ChatMessageDTO> messages = new ArrayList<>();
     private List<ChatResponseDTO> responses = new ArrayList<>();
 
+
     // 모든 메시지 가져오기
     public List<ChatMessageDTO> getAllMessages() {
         return messages;
     }
+
 
     // 특정 사용자의 메시지 가져오기
     public List<ChatMessageDTO> getMessagesBySender(String sender) {
@@ -37,6 +37,7 @@ public class ChatService {
                 .filter(message -> message.getSender().equals(sender))
                 .collect(Collectors.toList());
     }
+
 
     //gpt 응답 가져오기
     public List<ChatResponseDTO> getAllResponses() {
@@ -55,9 +56,7 @@ public class ChatService {
         ChatResponseDTO response = new ChatResponseDTO(
                 "ChatBot", chatMessageDTO.getSender(), gptResponse, LocalDateTime.now()
         );
-
         responses.add(response);
-
         return response;
     }
 
@@ -65,8 +64,6 @@ public class ChatService {
     private String getGptResponse(String userMessage) {
         List<TravelListDTO> travelListDTOs = travelService.fetchTravelInfoByCategory(new ArrayList<>());
         List<TravelDTO> travelList = travelListDTOs.stream().map(this::convertToTravelDTO).collect(Collectors.toList());
-
-
         String prompt = "여행지 목록이다:\n";
         for (TravelDTO travel : travelList) {
             prompt += travel.getTravName() + " - " + travel.getTravAddress() + "\n";
@@ -79,7 +76,6 @@ public class ChatService {
         String gptResponse = gptService.callGptApi(prompt);
         return gptResponse;
     }
-
     private TravelDTO convertToTravelDTO(TravelListDTO travelListDTO) {
         return new TravelDTO(
                 travelListDTO.getTravName(),
@@ -91,7 +87,5 @@ public class ChatService {
                 "이용 요금 정보 없음" //
         );
     }
-
-    //
 
 }

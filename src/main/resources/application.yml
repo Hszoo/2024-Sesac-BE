@@ -13,6 +13,7 @@ logging:
     org:
       springframework=DEBUG:
 
+
 openai:
   api:
     key:
