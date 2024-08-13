@@ -13,6 +13,8 @@ public class TravelDTO {
     private Long travId;
     private String travName;
     private String travAddress;
+    private String travX;
+    private String travY;
     private String travImg;
     private List<String> travCategories; // 지체, 시각 등 카테고리 저장
     private Integer reviewCount;

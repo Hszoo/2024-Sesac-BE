@@ -1,3 +1,6 @@
+resources/application-secret.yml
+src/main/resources/application-secret.yml
+
 .DS_Store
 ._.DS_Store
 **/.DS_Store

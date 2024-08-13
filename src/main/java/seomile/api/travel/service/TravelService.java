@@ -1,10 +1,18 @@
 package seomile.api.travel.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
+import seomile.api.travel.dto.GeoLocation;
 import seomile.api.travel.dto.TravelDTO;
 import seomile.api.travel.dto.TravelListDTO;
 
@@ -22,6 +30,8 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 public class TravelService {
+    @Value("${kakao.api.key}")
+    private String geoKey;
 
     @Autowired
     private TravelRepository travelRepository;
@@ -79,7 +89,12 @@ public class TravelService {
                 String styleAttribute = imageElement != null ? imageElement.attr("style") : "Not Found";
                 String imageUrl = domain + extractImageUrl(styleAttribute);
 
+
                 TravelListDTO travelInfo = new TravelListDTO(travelId, travelName, address, imageUrl);
+
+                // geocoding : 주소 -> X, Y 좌표
+                addressToXY(travelInfo, address);
+
                 travelInfoList.add(travelInfo);
             }
 
@@ -143,6 +158,7 @@ public class TravelService {
         }
         return travelDetailInfo;
     }
+
     public List<TravelDTO> searchTravelByKeyword(String keyword) {
         List<TravelListDTO> travelInfoList = fetchTravelInfoByCategory(new ArrayList<>()); // 빈 카테고리 리스트 전달
         List<TravelDTO> result = new ArrayList<>();
@@ -157,6 +173,7 @@ public class TravelService {
         }
         return result;
     }
+
     // 카테고리 번호에 따라 URL 생성
     private String generateUrl(List<Integer> categories) {
         String addUrl = "?sortOrder=&srchType=all&srchFilter=&srchWord=";
@@ -174,10 +191,12 @@ public class TravelService {
         }
         return urlBuilder.toString();
     }
+
     // 요청 받은 카테고리 번호 -> 코드 변환
     private String getCategoryCode(Integer category) {
         return "TOUR_WEAK_TYPE_" + category;
     }
+
     // 테이블에서 특정 항목의 데이터 추출
     private String getTableData(Document doc, String title) {
         Elements tableElements = doc.select("div.table");
@@ -189,6 +208,7 @@ public class TravelService {
         }
         return "Not Found";
     }
+
     // HTML에서 이미지 URL 추출
     private String extractImageUrl(String styleAttribute) {
         String urlPrefix = "background-image:url('";
@@ -197,6 +217,7 @@ public class TravelService {
         int endIndex = styleAttribute.indexOf(urlSuffix);
         return styleAttribute.substring(startIndex, endIndex);
     }
+
     // 관광지의 ID값 추출
     private String extractAttractionId(Element linkElement) {
         if (linkElement != null) {
@@ -209,5 +230,61 @@ public class TravelService {
         return "Not Found";
     }
 
+    // 지오코딩할 주소 전달 받음
+    private void addressToXY(TravelListDTO travelDto, String address) {
 
+        // geocoding : X, Y 좌표값 받아옴
+        ResponseEntity<String> response = requestKakaoGeocoder(address);
+
+        // 응답을 파싱
+        parsingLocation(travelDto, response);
+    }
+
+    // 카카오 API 요청
+    private ResponseEntity<String> requestKakaoGeocoder(String address) {
+        // URL에 쿼리 파라미터 추가
+        String url = "https://dapi.kakao.com/v2/local/search/address.json?query=" + address;
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "KakaoAK " + geoKey);
+        headers.set("content-type", "application/json");
+        HttpEntity<?> entity = new HttpEntity<>(headers);
+
+        // json Return
+        return restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                entity,
+                String.class
+        );
+    }
+
+    // parsing : 카카오 API 응답 -> X,Y좌표값
+    private TravelListDTO parsingLocation(TravelListDTO travelDto, ResponseEntity<String> kakaoJson) {
+        try {
+            // JSON 응답
+            String responseBody = kakaoJson.getBody();
+
+            // JSON -> 객체로 변환
+            ObjectMapper objectMapper = new ObjectMapper();
+            GeoLocation apiResponse = objectMapper.readValue(responseBody, GeoLocation.class);
+
+            // x, y 좌표 parsing
+            if (apiResponse.getDocuments() != null && !apiResponse.getDocuments().isEmpty()) {
+                GeoLocation.Document document = apiResponse.getDocuments().get(0);
+                System.out.println("주소 : " + document.getAddressName() + " X 좌표 : " + document.getX() + " Y 좌표 : " + document.getY());
+
+                travelDto.setTravX(document.getX());
+                travelDto.setTravY(document.getY());
+
+                return travelDto;
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return travelDto;
+    }
 }
