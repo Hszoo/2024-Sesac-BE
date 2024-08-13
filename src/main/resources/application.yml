@@ -1,6 +1,8 @@
 spring:
   application:
     name: api
+  profiles:
+    include: secret
 
 jwt:
   header: Authorization
@@ -11,9 +13,12 @@ jwt:
 logging:
   level:
     org:
-      springframework=DEBUG:
-
+      springframework: DEBUG
 
 openai:
   api:
     key:
+
+kakao:
+  api:
+    key: ${KAKAO_KEY}
