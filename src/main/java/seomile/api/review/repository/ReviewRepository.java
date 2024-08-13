@@ -20,4 +20,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     @Query("SELECT r FROM Review r WHERE r.travel.travCode = :travCode")
     List<Review> findByTravelCode(@Param("travCode") String travCode);
+
+    @Query("SELECT r FROM Review r WHERE r.travel.travCode = :travCode AND r.reviewId = :reviewId")
+    Optional<Review> findByTravelCodeAndReviewId(@Param("travCode") String travCode, @Param("reviewId") Long reviewId);
 }

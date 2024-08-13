@@ -45,6 +45,7 @@ public class TravelService {
     String domain = "https://www.seouldanurim.net";
     String basePath = "/attractions/D/TOURINFOTYPE2";
 
+
     // 여행지 정보 카테고리 별 크롤링
     public List<TravelListDTO> fetchTravelInfoByCategory(List<Integer> categories) {
         List<TravelListDTO> travelInfoList = new ArrayList<>();
@@ -87,6 +88,7 @@ public class TravelService {
         }
         return travelInfoList;
     }
+
 
     // 상세 관광지 정보 크롤링
     public TravelDTO fetchTravelDetailInfo(String travelID) {
@@ -141,7 +143,20 @@ public class TravelService {
         }
         return travelDetailInfo;
     }
+    public List<TravelDTO> searchTravelByKeyword(String keyword) {
+        List<TravelListDTO> travelInfoList = fetchTravelInfoByCategory(new ArrayList<>()); // 빈 카테고리 리스트 전달
+        List<TravelDTO> result = new ArrayList<>();
 
+        for (TravelListDTO travel : travelInfoList) {
+            if (travel.getTravName().toLowerCase().contains(keyword.toLowerCase())) {
+                TravelDTO detailInfo = fetchTravelDetailInfo(travel.getTravId());
+                if (detailInfo != null) {
+                    result.add(detailInfo);
+                }
+            }
+        }
+        return result;
+    }
     // 카테고리 번호에 따라 URL 생성
     private String generateUrl(List<Integer> categories) {
         String addUrl = "?sortOrder=&srchType=all&srchFilter=&srchWord=";
@@ -159,12 +174,10 @@ public class TravelService {
         }
         return urlBuilder.toString();
     }
-
     // 요청 받은 카테고리 번호 -> 코드 변환
     private String getCategoryCode(Integer category) {
         return "TOUR_WEAK_TYPE_" + category;
     }
-
     // 테이블에서 특정 항목의 데이터 추출
     private String getTableData(Document doc, String title) {
         Elements tableElements = doc.select("div.table");
@@ -176,7 +189,6 @@ public class TravelService {
         }
         return "Not Found";
     }
-
     // HTML에서 이미지 URL 추출
     private String extractImageUrl(String styleAttribute) {
         String urlPrefix = "background-image:url('";
@@ -185,7 +197,6 @@ public class TravelService {
         int endIndex = styleAttribute.indexOf(urlSuffix);
         return styleAttribute.substring(startIndex, endIndex);
     }
-
     // 관광지의 ID값 추출
     private String extractAttractionId(Element linkElement) {
         if (linkElement != null) {
@@ -197,4 +208,6 @@ public class TravelService {
         }
         return "Not Found";
     }
+
+
 }

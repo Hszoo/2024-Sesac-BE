@@ -120,4 +120,12 @@ public class ReviewService {
 
         return "리뷰 삭제 완료";
     }
+    
+    //리뷰아이디, 여행지코드로 리뷰 찾기
+    public ReviewDTO getReviewByTravelCodeAndReviewId(String travCode, Long reviewId) {
+        Review review = reviewRepository.findByTravelCodeAndReviewId(travCode, reviewId)
+                .orElseThrow(() -> new RuntimeException("리뷰를 찾을 수 없습니다."));
+        return new ReviewDTO(review);
+    }
+
 }
