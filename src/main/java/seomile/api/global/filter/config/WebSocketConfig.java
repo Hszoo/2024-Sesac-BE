@@ -1,4 +1,4 @@
-package seomile.api.config;
+package seomile.api.global.filter.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;

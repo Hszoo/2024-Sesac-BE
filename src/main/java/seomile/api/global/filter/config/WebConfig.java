@@ -1,4 +1,4 @@
-package seomile.api.config;
+package seomile.api.global.filter.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;

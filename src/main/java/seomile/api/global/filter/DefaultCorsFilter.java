@@ -1,4 +1,4 @@
-package seomile.api.filter;
+package seomile.api.global.filter;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.cors.CorsConfiguration;
