@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
-    private final TravelRepository travelRepository;
     private final TravelService travelService;
     private final MemberRepository memberRepository;
 

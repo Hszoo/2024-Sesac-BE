@@ -35,7 +35,7 @@ public class MemberController {
                     ? authorizationHeader.substring(7)
                     : authorizationHeader;
 
-            // MemberService에서 토큰을 통해 사용자 정보를 가져옵니다.
+            // MemberService에서 토큰을 통해 사용자 정보 가져옴
             Member member = memberService.getMemberFromToken(token);
 
             return new ResponseEntity<>(member, HttpStatus.OK);

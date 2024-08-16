@@ -27,13 +27,13 @@ public class ReviewController {
 
     // 관광지 리뷰 작성
     @PostMapping(value = "/{travCode}")
-    public ResponseEntity<String> writeReview(@PathVariable("travCode") String travCode, @RequestBody ReviewDTO reviewDTO) throws Exception {
+    public ResponseEntity<String> writeReview(@PathVariable("travCode") String travCode, @RequestBody ReviewDTO reviewDTO) {
         return new ResponseEntity<>(reviewService.writeReview(travCode, reviewDTO), HttpStatus.OK);
     }
 
     // 관광지 리뷰 수정
     @PatchMapping(value = "/{travCode}/{reviewId}")
-    public ResponseEntity<String> updateReview(@PathVariable("reviewId") Long reviewId, @RequestBody ReviewDTO reviewDTO) throws Exception {
+    public ResponseEntity<String> updateReview(@PathVariable("reviewId") Long reviewId, @RequestBody ReviewDTO reviewDTO) {
         return (new ResponseEntity<>(reviewService.updateReview(reviewId, reviewDTO), HttpStatus.OK));
     }
 

@@ -1,4 +1,5 @@
 package seomile.api.saveTravel.dto;
+
 import lombok.*;
 
 @Builder

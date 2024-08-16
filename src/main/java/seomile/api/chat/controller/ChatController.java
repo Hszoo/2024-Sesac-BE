@@ -1,5 +1,6 @@
 package seomile.api.chat.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import seomile.api.chat.dto.ChatResponseDTO;
@@ -8,13 +9,10 @@ import seomile.api.chat.service.ChatService;
 
 import java.util.List;
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/chat")
 public class ChatController {
     private final ChatService chatService;
-
-    public ChatController(ChatService chatService) {
-        this.chatService = chatService;
-    }
 
     // 채팅 전체 조회
     @GetMapping("")

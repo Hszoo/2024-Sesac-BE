@@ -11,10 +11,8 @@ import seomile.api.member.entity.Authority;
 import seomile.api.member.entity.Member;
 import seomile.api.member.repository.MemberRepository;
 import seomile.api.security.JwtProvider;
-import seomile.api.security.SecurityUtils;
 
 import java.util.Collections;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -70,7 +68,6 @@ public class MemberService {
         String username = jwtProvider.getAccount(token);
 
         // 사용자 정보 조회
-
         return memberRepository.findByUsername(username)
                 .orElseThrow(() -> new Exception("계정을 찾을 수 없습니다."));
     }

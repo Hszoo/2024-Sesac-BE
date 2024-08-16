@@ -30,14 +30,12 @@ public class ChatService {
         return messages;
     }
 
-
     // 특정 사용자의 메시지 가져오기
     public List<ChatMessageDTO> getMessagesBySender(String sender) {
         return messages.stream()
                 .filter(message -> message.getSender().equals(sender))
                 .collect(Collectors.toList());
     }
-
 
     //gpt 응답 가져오기
     public List<ChatResponseDTO> getAllResponses() {
@@ -76,6 +74,7 @@ public class ChatService {
         String gptResponse = gptService.callGptApi(prompt);
         return gptResponse;
     }
+
     private TravelDTO convertToTravelDTO(TravelListDTO travelListDTO) {
         return new TravelDTO(
                 travelListDTO.getTravName(),
