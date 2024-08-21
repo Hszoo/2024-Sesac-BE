@@ -22,3 +22,8 @@ openai:
 kakao:
   api:
     key: ${KAKAO_KEY}
+
+socketio:
+  server:
+    hostname: 127.0.0.1
+    port: 8081

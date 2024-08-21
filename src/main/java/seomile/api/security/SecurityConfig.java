@@ -12,7 +12,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
-import seomile.api.global.filter.DefaultCorsFilter;
+import seomile.api.global.config.DefaultCorsFilter;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package seomile.api.chat.controller;
+package seomile.api.chat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;

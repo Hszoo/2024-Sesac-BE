@@ -8,10 +8,12 @@ import seomile.api.travel.dto.TravelDTO;
 import seomile.api.travel.dto.TravelListDTO;
 import seomile.api.travel.service.TravelService;
 import seomile.api.gpt.service.GptService;
-import java.time.LocalDateTime;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 import java.util.stream.Collectors;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Service
 public class ChatService {
@@ -20,14 +22,13 @@ public class ChatService {
     @Autowired
     private GptService gptService;
 
-
-    private List<ChatMessageDTO> messages = new ArrayList<>();
-    private List<ChatResponseDTO> responses = new ArrayList<>();
+    private final Queue<ChatMessageDTO> messages = new ConcurrentLinkedQueue<>();
+    private final Queue<ChatResponseDTO> responses = new ConcurrentLinkedQueue<>();
 
 
     // 모든 메시지 가져오기
     public List<ChatMessageDTO> getAllMessages() {
-        return messages;
+        return new ArrayList<>(messages);
     }
 
     // 특정 사용자의 메시지 가져오기
@@ -39,7 +40,7 @@ public class ChatService {
 
     //gpt 응답 가져오기
     public List<ChatResponseDTO> getAllResponses() {
-        return responses;
+        return new ArrayList<>(responses);
     }
 
     // 메시지 처리
@@ -50,11 +51,13 @@ public class ChatService {
                 chatMessageDTO.getMessage()
         );
         messages.add(chatMessageDTO);
+
         String gptResponse = getGptResponse(chatMessageDTO.getMessage());
         ChatResponseDTO response = new ChatResponseDTO(
-                "ChatBot", chatMessageDTO.getSender(), gptResponse, LocalDateTime.now()
+                "ChatBot", chatMessageDTO.getSender(), gptResponse
         );
         responses.add(response);
+
         return response;
     }
 
