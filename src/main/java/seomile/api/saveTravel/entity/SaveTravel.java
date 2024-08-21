@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import seomile.api.travel.entity.Travel;
 import seomile.api.member.entity.Member;
+
 @Getter
 @Setter
 @Entity

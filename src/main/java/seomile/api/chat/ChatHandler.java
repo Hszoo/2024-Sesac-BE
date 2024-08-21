@@ -1,4 +1,4 @@
-package seomile.api.chat.controller;
+package seomile.api.chat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +20,7 @@ public class ChatHandler extends TextWebSocketHandler {
     private Map<String, WebSocketSession> sessions = new HashMap<>();
 
     @Override
-    public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+    public void afterConnectionEstablished(WebSocketSession session) {
         sessions.put(session.getId(), session);
     }
 
@@ -35,7 +35,7 @@ public class ChatHandler extends TextWebSocketHandler {
     }
 
     @Override
-    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
         sessions.remove(session.getId());
     }
 }

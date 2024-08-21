@@ -9,15 +9,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import seomile.api.member.repository.MemberRepository;
-import seomile.api.member.entity.Member;
 import seomile.api.saveTravel.dto.SaveTravelDTO;
-import seomile.api.saveTravel.entity.SaveTravel;
 import seomile.api.saveTravel.service.SaveTravelService;
 import seomile.api.travel.dto.TravelDTO;
 
 import java.util.List;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/bookmark")

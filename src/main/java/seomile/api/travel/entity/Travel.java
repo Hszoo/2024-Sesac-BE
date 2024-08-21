@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 import seomile.api.review.entity.Review;
 
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -24,11 +23,4 @@ public class Travel {
     @JsonIgnore // 무한 루프 방지를 위해 추가
     private List<Review> reviews;
 
-//    private String travelName;
-//    private String travAddress;
-//    private String travTel;
-//    private Date closeDate;
-//    private String availableTime;
-//    private String fee;
-//    private String travImg;
 }
